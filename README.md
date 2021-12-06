@@ -82,8 +82,14 @@ Open a terminal into your main folder and run program **stop** :
 
 &nbsp;
 
+Tips: For the moment, each time you change your server name, the links of your website still exists in your system.
+      To remove them quickly, execute program **remove**.
+      This behaviour will change soon in order to be automatic at each server **start**.
+
 &nbsp;
- 
+
+&nbsp;
+
 ***Your web server is ready to go !***
 
 &nbsp;

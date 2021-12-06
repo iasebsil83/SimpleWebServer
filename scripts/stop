@@ -4,11 +4,19 @@
 
 # UPDATE CONFIG FILE
 
+#root user
+clear
+if [[ $USER != 'root' ]]; then
+	echo "This program must be launched as root."
+	echo -e "\n[Stopping cancelled]"
+	exit 1
+fi
+
 #get variables from user.conf
 clear
-source user.conf || {
+source conf/user.conf || {
 	echo "Unable to access to conf/user.conf."
-	echo -e "\n[Starting cancelled]"
+	echo -e "\n[Stopping cancelled]"
 	exit 1
 }
 
@@ -17,8 +25,9 @@ source user.conf || {
 # STOP SERVER
 
 #disable site on apache2
-a2dissite $serverName.conf && {
-	echo    "Successfully disabled server on apache."
+a2dissite $serverName.conf && \
+systemctl restart apache2  && {
+	echo -e "\nSuccessfully disabled server on apache."
 	echo -e "\nServer $serverName is OFFLINE."
 } || {
 	echo -e "\nCould not disable server on apache2."

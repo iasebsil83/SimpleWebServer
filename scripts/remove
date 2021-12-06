@@ -1,0 +1,26 @@
+#!/bin/bash
+
+
+
+#root user
+clear
+if [[ $USER != 'root' ]]; then
+	echo "This program must be launched as root."
+	echo -e "\n[Operation cancelled]"
+	exit 1
+fi
+
+#show existing servers
+echo "Existing servers :"
+echo
+echo "$(ls /var/www)"
+echo
+
+#prompt
+read -p "Enter the name of the server to remove : " serverName
+rm /var/www/$serverName                          && \
+rm /etc/apache2/sites-available/$serverName.conf && {
+	echo -e "\nSuccessfully removed server $serverName."
+} || {
+	echo -e "\nUnable to totally remove server $serverName."
+}

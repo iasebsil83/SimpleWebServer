@@ -29,12 +29,12 @@ read
 
 #allow apache2 in firewall
 clear
-ufw allow apache2 && \
+ufw allow Apache && \
 ufw enable        && {
-	echo "Program 'apache2' allowed in firewall."
+	echo "Program 'Apache' allowed in firewall."
 	echo "Firewall enabled."
 } || {
-	echo -e "\nUnable to allow 'apache2' in firewall."
+	echo -e "\nUnable to allow 'Apache' in firewall."
 	echo "Maybe you don't have root privileges ?"
 	echo -e "\n[Installation cancelled]"
 	exit 1
@@ -70,7 +70,8 @@ echo -e "\n[Press ENTER to continue]"
 read
 
 #link config file
-ln -s config/generated.conf /etc/apache2/sites-available/$serverName.conf && {
+clear
+ln -s conf/generated.conf /etc/apache2/sites-available/$serverName.conf && {
 	echo "Successfully linked server configuration file."
 } || {
 	rm -rf /var/www/$serverName                          2> /dev/null
@@ -85,9 +86,9 @@ read
 
 #move utility scripts
 mv scripts/start    $PWD && \
-mv script/stop      $PWD && \
-mv script/restart   $PWD && \
-mv script/uninstall $PWD && \
+mv scripts/stop      $PWD && \
+mv scripts/restart   $PWD && \
+mv scripts/uninstall $PWD && \
 mv install scripts       && {
 	echo "Successfully installed server."
 } || {

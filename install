@@ -1,0 +1,99 @@
+#!/bin/bash
+
+
+
+# CHECK REQUIREMENTS
+
+
+#root user
+clear
+if [[ $USER != 'root' ]]; then
+	echo "Installation program must be launched as root."
+	echo -e "\n[Installation cancelled]"
+	exit 1
+fi
+
+#apache2
+clear
+a2query --help > /dev/null && {
+	echo "Package 'apache2' already installed."
+} || {
+	echo "Package 'apache2' is not installed on your computer."
+	echo "Please install it before :"
+	echo "    sudo apt install apache2"
+	echo -e "\n[Installation cancelled]"
+	exit 1
+}
+echo -e "\n[Press ENTER to continue]"
+read
+
+#allow apache2 in firewall
+clear
+ufw allow apache2 && \
+ufw enable        && {
+	echo "Program 'apache2' allowed in firewall."
+	echo "Firewall enabled."
+} || {
+	echo -e "\nUnable to allow 'apache2' in firewall."
+	echo "Maybe you don't have root privileges ?"
+	echo -e "\n[Installation cancelled]"
+	exit 1
+}
+echo -e "\n[Press ENTER to continue]"
+read
+
+
+
+
+# LINK SERVER FOLDER
+
+#check already existing file/folder
+clear
+if [[ -e /var/www/$serverName ]]; then
+	echo "A file/folder '$serverName' already exists in /var/www."
+	echo "Please remove it and retry installation."
+	echo -e "\n[Installation cancelled]"
+	exit 1
+fi
+
+#link server folder
+ln -s -d src /var/www/$serverName && {
+	echo "Successfully linked server folder."
+} || {
+	rm -rf /var/www/$serverName 2> /dev/null
+	echo -e "\nUnable to link website folder."
+	echo    "Maybe you don't have root privileges ?"
+	echo -e "\n[Installation cancelled]"
+	exit 1
+}
+echo -e "\n[Press ENTER to continue]"
+read
+
+#link config file
+ln -s config/generated.conf /etc/apache2/sites-available/$serverName.conf && {
+	echo "Successfully linked server configuration file."
+} || {
+	rm -rf /var/www/$serverName                          2> /dev/null
+	rm -rf /etc/apache2/sites-available/$serverName.conf 2> /dev/null
+	echo -e "\nUnable to link server configuration file."
+	echo    "Maybe you don't have root privileges ?"
+	echo -e "\n[Installation cancelled]"
+	exit 1
+}
+echo -e "\n[Press ENTER to continue]"
+read
+
+#move utility scripts
+mv scripts/start    $PWD && \
+mv script/stop      $PWD && \
+mv script/restart   $PWD && \
+mv script/uninstall $PWD && \
+mv install scripts       && {
+	echo "Successfully installed server."
+} || {
+	rm -rf /var/www/$serverName                          2> /dev/null
+	rm -rf /etc/apache2/sites-available/$serverName.conf 2> /dev/null
+	echo -e "\nUnable to move utility scripts."
+	echo -e "\n[Installation cancelled]"
+	exit 1
+}

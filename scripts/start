@@ -1,0 +1,53 @@
+#!/bin/bash
+
+
+
+# UPDATE CONFIG FILE
+
+#get variables from user.conf
+clear
+source user.conf || {
+	echo "Unable to access to conf/user.conf."
+	echo -e "\n[Starting cancelled]"
+	exit 1
+}
+
+#overwrite config file
+echo "<VirtualHost *$port>"                      >  conf/generated.conf && \
+echo "    ServerAdmin $adminName@$address"       >> conf/generated.conf && \
+echo "    ServerName $serverName"                >> conf/generated.conf && \
+echo "    ServerAlias $serverAlias"              >> conf/generated.conf && \
+echo "    DocumentRoot /var/www/$serverName"     >> conf/generated.conf && \
+echo "    ErrorLog $PWD/log/error.log"           >> conf/generated.conf && \
+echo "    ErrorLog $PWD/log/access.log combined" >> conf/generated.conf && \
+echo "</VirtualHost>"                            >> conf/generated.conf && {
+	echo "Successfully set server config file."
+} || {
+	echo -e "\nUnable to set config file /etc/apache2/sites-available/$serverName.conf"
+	echo -e "\n[Starting cancelled]"
+	exit 1
+}
+
+
+
+# START APACHE2
+
+#enable site on apache2
+a2ensite $serverName.conf && {
+	echo "Successfully enabled server on apache."
+} || {
+	echo -e "\nCould not enable server on apache2."
+	echo -e "\n[Starting cancelled]"
+	exit 1
+}
+
+#started service
+apache2ctl configtest     && \
+systemctl restart apache2 && {
+	echo    "Successfully started apache2 service."
+	echo -e "\nServer $serverName is ONLINE."
+} || {
+	echo -e "\nCould not start service apache2."
+	echo -e "\n[Starting cancelled]"
+	exit 1
+}

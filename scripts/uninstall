@@ -1,0 +1,44 @@
+#!/bin/bash
+
+
+
+
+#stop server
+./stop &> /dev/null
+
+#root user
+clear
+if [[ $USER != 'root' ]]; then
+	echo "Uninstallation program must be launched as root."
+	echo -e "\n[Uninstallation cancelled]"
+	exit 1
+fi
+
+#remove website folder link
+clear
+rm -f /var/www/$serverName  && {
+	echo "Successfully removed server folder link."
+} || {
+	echo -e "\nUnable to remove server folder link: /var/www/$serverName"
+	echo -e "\n[Uninstallation cancelled]"
+	exit 1
+}
+
+#remove server config file link
+rm -f /etc/apache2/sites-available/$serverName.conf && {
+	echo "Successfully removed server configuration file link."
+} || {
+	echo -e "\nUnable to remove server configuration file link: /etc/apache2/sites-available/$serverName.conf"
+	echo -e "\n[Uninstallation cancelled]"
+	exit 1
+}
+
+#remove all
+rm -rf * && {
+	echo "Successfully uninstalled SimpleWebServer."
+} || {
+	echo -e "\nUnable to totally remove current files."
+	echo    "Try doing it manually: rm -rf *"
+	echo -e "\n(No need to have root privileges)"
+	exit 1
+}

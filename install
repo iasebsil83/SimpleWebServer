@@ -47,6 +47,19 @@ read
 
 # LINK SERVER FOLDER
 
+#get user info
+clear
+echo    "Now, please take a minute to look at file conf/user.conf"
+echo    "to adjust your server settings."
+echo -e "\nThen continue installation."
+echo -e "\n[Press ENTER to continue]"
+read
+source conf/user.conf || {
+	echo -e "\nError getting information from 'conf/user.conf'."
+	echo -e "\n[Installation cancelled]"
+	exit 1
+}
+
 #check already existing file/folder
 clear
 if [[ -e /var/www/$serverName ]]; then

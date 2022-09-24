@@ -8,12 +8,12 @@
 
 ## Requirements
 
-- **Linux Operating System**
+- **Linux Operating System**<br>
 This program has been made to run on linux systems only.
 
-- **Package : Apache 2**
-You need to have apache2 to install your web server.
-It can be installed bu using command :
+- **Package : Apache 2**<br>
+You need to have apache2 to install your web server.<br>
+It can be installed by using command :
 ```bash
 sudo apt install apache2
 ```

@@ -7,7 +7,7 @@
 
 #root user
 clear
-if [[ $USER != 'root' ]]; then
+if [[ $(id -u) != 0 ]]; then
 	echo "Installation program must be launched as root."
 	echo -e "\n[Installation cancelled]"
 	exit 1
@@ -15,7 +15,7 @@ fi
 
 #apache2
 clear
-a2query --help > /dev/null && {
+a2query --help 2> /dev/null && {
 	echo "Package 'apache2' already installed."
 } || {
 	echo "Package 'apache2' is not installed on your computer."
@@ -98,6 +98,7 @@ echo -e "\n[Press ENTER to continue]"
 read
 
 #move utility scripts
+clear
 mv scripts/start     $PWD && \
 mv scripts/stop      $PWD && \
 mv scripts/restart   $PWD && \

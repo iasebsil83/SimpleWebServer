@@ -8,7 +8,7 @@
 
 #root user
 clear
-if [[ $USER != 'root' ]]; then
+if [[ $(id -u) != 0 ]]; then
 	echo "Uninstallation program must be launched as root."
 	echo -e "\n[Uninstallation cancelled]"
 	exit 1

@@ -6,7 +6,7 @@
 
 #root user
 clear
-if [[ $USER != 'root' ]]; then
+if [[ $(id -u) != 0 ]]; then
 	echo "This program must be launched as root."
 	echo -e "\n[Stopping cancelled]"
 	exit 1
